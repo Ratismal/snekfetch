@@ -38,7 +38,7 @@ function request(snek, options = snek.options) {
       if (data) {
         try {
           length = Buffer.byteLength(data);
-        } catch (err) {} // eslint-disable-line no-empty
+        } catch (err) { } // eslint-disable-line no-empty
       }
       options.headers['content-length'] = length;
     }
@@ -68,6 +68,7 @@ function request(snek, options = snek.options) {
     req.once('error', reject);
 
     const body = [];
+    let bytes = 0;
     let headers;
     let statusCode;
     let statusText;
@@ -97,6 +98,11 @@ function request(snek, options = snek.options) {
       }
 
       stream.on('data', (chunk) => {
+        if (options.maxBytes) {
+          bytes += chunk.length;
+          if (bytes > options.maxBytes)
+            stream.destroy(new Error('Exceeded byte limit'));
+        }
         /* istanbul ignore next */
         if (!snek.push(chunk)) {
           snek.pause();
