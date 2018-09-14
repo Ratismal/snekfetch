@@ -100,8 +100,11 @@ function request(snek, options = snek.options) {
       stream.on('data', (chunk) => {
         if (options.maxBytes) {
           bytes += chunk.length;
-          if (bytes > options.maxBytes)
-            stream.destroy(new Error('Exceeded byte limit'));
+          if (bytes > options.maxBytes) {
+            let err = new Error('Exceeded byte limit');
+            reject(err);
+            return stream.destroy(err);
+          }
         }
         /* istanbul ignore next */
         if (!snek.push(chunk)) {
