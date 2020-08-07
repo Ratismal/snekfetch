@@ -145,7 +145,7 @@ class Snekfetch extends transport.Parent {
     this._finalizeRequest();
     // eslint-disable-next-line no-return-assign
     return this._response = transport.request(this)
-      .then(({ raw, headers, statusCode, statusText }) => {
+      .then(({ raw, headers, statusCode, statusText, options }) => {
         // forgive me :(
         const self = this; // eslint-disable-line consistent-this
         /**
@@ -183,6 +183,7 @@ class Snekfetch extends transport.Parent {
           headers,
           statusCode,
           statusText,
+          options,
         };
 
         if (res.ok) {

@@ -120,7 +120,7 @@ function request(snek, options = snek.options) {
           options.connection.close();
         }
         resolve({
-          raw, headers, statusCode, statusText,
+          raw, headers, statusCode, statusText, options
         });
       });
     };
